@@ -16,7 +16,7 @@ https://www.figma.com/file/oEox18VbeVdWPifGqj5PbK/Form-study-project?node-id=0%3
 
 ### Установить зависимости
 ```
-npm install
+npm i
 ```
 
 ### Запустить сервер
@@ -57,9 +57,9 @@ POST
 
 #### Тело ответа
 
-```
+```js
 {
-  status: int;
+  status: number;
   message: string;
 }
  ```
