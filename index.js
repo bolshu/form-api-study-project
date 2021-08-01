@@ -10,26 +10,33 @@ app.use(
 );
 
 /**
- * @param {Object} [req.body]
- * @param {string} [name]
- * @param {string} [email]
- * @param {string} [phone]
-   @example curl -d "email=1" -X POST http://localhost:3000/registration
+ * @typedef {Object} Request
+ * @property {string} name
+ * @property {string} email
+ * @property {string} phone
+ * 
+ * @typedef {Object} Response
+ * @property {number} status
+ * @property {string} message
+ * 
+ * @param {Request} [req.body]
+ * 
+ * @return {Response}
  */
 app.post("/registration", (req, res) => {
   if (req.body.email || req.body.phone) {
     res.send({
-      code: 200,
-      message: "Пользователь успешно добавлен",
+      status: 200,
+      message: "Все хорошо, вы зареганы!",
     });
   } else {
     res.send({
-      code: 400,
+      status: 400,
       message: "Введите электронную почту или телефон",
     });
   }
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`Сервер запущен: http://localhost:${port}`);
 });
