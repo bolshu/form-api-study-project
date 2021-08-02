@@ -2,12 +2,8 @@ const express = require("express");
 const app = express();
 const port = 3000;
 
-app.use(express.json());
-app.use(
-  express.urlencoded({
-    extended: true,
-  })
-);
+app.use(express.query());
+
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
@@ -17,6 +13,18 @@ app.use(function (req, res, next) {
   next();
 });
 
+function rawBody(req, res, next) {
+  req.setEncoding("utf8");
+  req.rawBody = "";
+  req.on("data", function (chunk) {
+    req.rawBody += chunk;
+  });
+  req.on("end", function () {
+    next();
+  });
+}
+
+app.use(rawBody);
 /**
  * @typedef {Object} Request
  * @property {string} name
@@ -32,7 +40,11 @@ app.use(function (req, res, next) {
  * @return {Response}
  */
 app.post("/registration", (req, res) => {
-  if (req.body.email || req.body.phone) {
+  const reqParams = req.rawBody.split("&");
+  const email = reqParams.filter((param) => param.includes("email"))[0].split('=')[1];
+  const phone = reqParams.filter((param) => param.includes("phone"))[0].split('=')[1];
+
+  if (email || phone) {
     res.status(200);
     res.send({
       message: "Все хорошо, вы зареганы!",
